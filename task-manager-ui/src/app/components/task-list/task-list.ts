@@ -1,9 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { DatePipe } from '@angular/common';
-// Modifiez la ligne 4 pour retirer le "s" de models :
 import { Task } from '../../model/task.model';
-
-
+import { TaskService } from '../../task.service';
 
 @Component({
   selector: 'app-task-list',
@@ -11,27 +9,30 @@ import { Task } from '../../model/task.model';
   templateUrl: './task-list.html',
   styleUrl: './task-list.css'
 })
-export class TaskList {
-  tasks: Task[] = [
-    {
-      id: 1,
-      title: 'Apprendre Angular',
-      description: 'Terminer le chapitre sur les services',
-      completed: false,
-      createdAt: '2026-11-03T10:15:30'
-    },
-    {
-      id: 2,
-      title: 'Apprendre Spring Boot',
-      completed: true,
-      createdAt: '2026-11-02T08:00:00'
-    },
-    {
-      id: 3,
-      title: 'Installer PostgreSQL',
-      description: 'Fait en phase 1',
-      completed: true,
-      createdAt: '2026-11-01T18:30:00'
-    }
-  ];
+export class TaskList implements OnInit {
+  private taskService = inject(TaskService);
+
+  tasks = signal<Task[]>([]);
+  loading = signal(true);
+  error = signal<string | null>(null);
+
+  ngOnInit(): void {
+    this.loadTasks();
+  }
+
+  loadTasks(): void {
+    this.loading.set(true);
+    this.error.set(null);
+
+    this.taskService.getAll().subscribe({
+      next: (data: Task[]) => {
+        this.tasks.set(data);
+        this.loading.set(false);
+      },
+      error: () => {
+        this.error.set('Impossible de charger les tâches. Vérifie que le backend tourne sur le port 9090.');
+        this.loading.set(false);
+      }
+    });
+  }
 }

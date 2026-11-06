@@ -14,3 +14,7 @@
   float: right;
   font-weight: bold;
 }
+.error {
+  color: #c0392b;
+  font-weight: bold;
+}

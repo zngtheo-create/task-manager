@@ -1,6 +1,8 @@
 <h2>Mes tâches</h2>
 
-@for (task of tasks; track task.id) {
+
+@for (task of tasks(); track task.id) {
+
   <div class="task" [class.done]="task.completed">
     <h3>{{ task.title }}</h3>
     @if (task.description) {
@@ -11,4 +13,26 @@
   </div>
 } @empty {
   <p>Aucune tâche.</p>
+}
+
+<h2>Mes tâches</h2>
+
+@if (loading()) {
+  <p>Chargement...</p>
+} @else if (error()) {
+  <p class="error">{{ error() }}</p>
+  <button (click)="loadTasks()">Réessayer</button>
+} @else {
+  @for (task of tasks(); track task.id) {
+    <div class="task" [class.done]="task.completed">
+      <h3>{{ task.title }}</h3>
+      @if (task.description) {
+        <p>{{ task.description }}</p>
+      }
+      <small>Créée le {{ task.createdAt | date: 'dd/MM/yyyy HH:mm' }}</small>
+      <span class="status">{{ task.completed ? 'Terminée' : 'En cours' }}</span>
+    </div>
+  } @empty {
+    <p>Aucune tâche pour le moment.</p>
+  }
 }
