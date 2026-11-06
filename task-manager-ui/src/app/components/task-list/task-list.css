@@ -1,0 +1,16 @@
+.task {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 12px;
+}
+
+.task.done h3 {
+  text-decoration: line-through;
+  color: #888;
+}
+
+.status {
+  float: right;
+  font-weight: bold;
+}
