@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { Task } from '../../models/task.model';
+// Modifiez la ligne 4 pour retirer le "s" de models :
+import { Task } from '../../model/task.model';
+
+
 
 @Component({
   selector: 'app-task-list',
